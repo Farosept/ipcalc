@@ -3,7 +3,32 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <getopt.h>
+int binary_mask[32], binary_ip[32];
 
+void to_digit(char *ch, int *binary)
+{
+
+    int octet1, octet2, octet3, octet4;
+    sscanf(ch, "%d.%d.%d.%d", &octet1, &octet2, &octet3, &octet4);
+    int octets[] = {octet1, octet2, octet3, octet4};
+    int i = 0;
+
+    for (int j = 0; j < 32; j++)
+    {
+        binary[j] = 0;
+    }
+    for (int j = 0; j < 4; j++)
+    {
+        int n = octets[j];
+        i = 7 * (j + 1);
+        do
+        {
+            binary[i] = n % 2;
+            n = n / 2;
+            i--;
+        } while (n > 0);
+    }
+}
 void print_wrong_arg()
 {
     printf("\nipclc -a <ip-адрес> -m <маска>\n");
@@ -47,10 +72,43 @@ int is_ip(char *ip)
     }
     return 0;
 }
+int is_mask(char *mask)
+{
+    int k = 0;
+    for (int j = 0; j < 4; j++)
+    {
+        int i = 0;
+        while ((mask[k] != '.') && (mask[k] != '\0'))
+        {
+            k++;
+            i++;
+            if (i > 3)
+            {
+                return 0;
+            }
+        }
+        k++;
+    }
+    to_digit(mask, binary_mask);
+    for (int j = 0; j < 32; j++)
+    {
+        if (j % 8 == 0)
+        {
+            for (int k = j - 7; k < j; k++)
+            {
+                if (binary_mask[k] == 1 && binary_mask[k - 1] == 0)
+                {
+                    return 0;
+                }
+            }
+        }
+    }
+    return 1;
+}
 
 int main(int argc, char **argv)
 {
-    int c, digit_optind = 0, option_index = 0;
+    int c, option_index = 0;
     int args[] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     char *arg_a, *arg_m;
     static struct option long_options[] = {
@@ -62,18 +120,6 @@ int main(int argc, char **argv)
         {"max", 0, 0, 6},
         {"count", 0, 0, 7},
         {0, 0, 0, 0}};
-    if (argc == 1)
-    {
-        printf("\nipclc -a <ip-адрес> -m <маска>\n");
-        printf("\nДоступные параметры:\n");
-        printf("--broadcast		вывод широковещательного адреса\n");
-        printf("--mbit		вывод количества бит маски\n");
-        printf("--address		вывод адреса сети\n");
-        printf("--class		вывод класса адреса\n");
-        printf("--min		вывод минимального адреса\n");
-        printf("--max		вывод максимального адреса\n");
-        printf("--count		вывод количества хостов\n");
-    }
     while ((c = getopt_long(argc, argv, "a:m:", long_options, &option_index)) != -1)
     {
         switch (c)
@@ -119,7 +165,7 @@ int main(int argc, char **argv)
         printf(" с аргументом %s\n", arg_a);
         printf("\n m");
         printf(" с аргументом %s\n", arg_m);
-        if ((is_ip(arg_a) == 0))
+        if ((is_ip(arg_a) == 0)||(is_mask(arg_m) == 0))
         {
             print_wrong_arg();
         }
