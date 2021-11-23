@@ -3,8 +3,4 @@ compiler: gcc
 
 os: linux
 
-<<<<<<< HEAD
 script: make
-=======
-script: make
->>>>>>> 92c2c983a61bbe679b88b0af7f32e0626d244c66
