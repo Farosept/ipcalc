@@ -7,3 +7,6 @@ os:
 
 script:
     -make
+branches:
+  only:
+    -develop
