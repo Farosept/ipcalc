@@ -1,4 +1,5 @@
 *.a
 *.o
 *.out
-ipclc
+build/
+bin/
