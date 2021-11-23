@@ -5,12 +5,13 @@
  ipclc -a <ip-адрес> -m <маска>
 
 Программа предоставляет следующие функции и возможности:
-    По умолчанию выводится вся информация.
 
-    --broadcast		вывод широковещательного адреса
+    --broadcast	вывод широковещательного адреса
     --mbit		вывод количества бит маски
-    --address		вывод адреса сети
+    --address	вывод адреса сети
     --class		вывод класса адреса
     --min		вывод минимального адреса
     --max		вывод максимального адреса
     --count		вывод количества хостов
+
+[![Build Status](https://app.travis-ci.com/Farosept/ipcalc.svg?token=2oRyTjpoHi7q1XsDqvSB&branch=main)](https://app.travis-ci.com/Farosept/ipcalc)
