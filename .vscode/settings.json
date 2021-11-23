@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "ctest.h": "c",
+        "ipclc.h": "c",
+        "stdlib.h": "c"
+    }
+}

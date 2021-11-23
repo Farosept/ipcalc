@@ -55,13 +55,15 @@ int main(int argc, char **argv)
     }
     if (args[0] == 1 && args[1] == 1)
     {
-        printf("\n a");
-        printf(" с аргументом %s\n", arg_a);
-        printf("\n m");
-        printf(" с аргументом %s\n", arg_m);
+
         if ((is_ip(arg_a) == 0)||(is_mask(arg_m) == 0))
         {
             print_wrong_arg();
+        }else{
+                    printf("\n a");
+        printf(" с аргументом %s\n", arg_a);
+        printf("\n m");
+        printf(" с аргументом %s\n", arg_m);
         }
     }
     else

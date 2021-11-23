@@ -1,14 +1,10 @@
 #include "ipclc.h"
 
-
 void to_digit(char *ch, int *binary)
 {
-
-    int octet1, octet2, octet3, octet4;
+    int octet1, octet2, octet3, octet4, i = 0;
     sscanf(ch, "%d.%d.%d.%d", &octet1, &octet2, &octet3, &octet4);
     int octets[] = {octet1, octet2, octet3, octet4};
-    int i = 0;
-
     for (int j = 0; j < 32; j++)
     {
         binary[j] = 0;
@@ -16,13 +12,23 @@ void to_digit(char *ch, int *binary)
     for (int j = 0; j < 4; j++)
     {
         int n = octets[j];
-        i = 7 * (j + 1);
+        int k = 0;
         do
         {
             binary[i] = n % 2;
             n = n / 2;
-            i--;
-        } while (n > 0);
+            i++;
+            k++;
+        } while (n > 0 || k < 8);
+    }
+    for (int u = 0; u < 4; u++)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            int tmp = binary[(8 * u) + i];
+            binary[(8 * u) + i] = binary[(7 + (8 * u)) - i];
+            binary[(7 + (8 * u)) - i] = tmp;
+        }
     }
 }
 void print_wrong_arg()
@@ -37,7 +43,6 @@ void print_wrong_arg()
     printf("--max		вывод максимального адреса\n");
     printf("--count		вывод количества хостов\n");
 }
-
 int is_ip(char *ip)
 {
     int k = 0;
@@ -86,18 +91,22 @@ int is_mask(char *mask)
         k++;
     }
     to_digit(mask, binary_mask);
-    for (int j = 0; j < 32; j++)
+    for (int j = 1; j < 32; j++)
     {
-        if (j % 8 == 0)
+        if (binary_mask[j] == 1 && binary_mask[j - 1] == 0)
         {
-            for (int k = j - 7; k < j; k++)
-            {
-                if (binary_mask[k] == 1 && binary_mask[k - 1] == 0)
-                {
-                    return 0;
-                }
-            }
+            return 0;
         }
     }
-    return 1;
+    int octet1, octet2, octet3, octet4;
+    int res = sscanf(mask, "%d.%d.%d.%d", &octet1, &octet2, &octet3, &octet4);
+    if (res != 4)
+    {
+        return 0;
+    }
+    if ((octet1 >= 0 && octet1 <= 255) && (octet2 >= 0 && octet2 <= 255) && (octet3 >= 0 && octet3 <= 255) && (octet4 >= 0 && octet4 <= 255))
+    {
+        return 1;
+    }
+    return 0;
 }

@@ -1,9 +1,6 @@
 language: c
 compiler: gcc
 
-os:
-    - linux
-    - freebsd
+os: linux
 
-script:
-    -make
+script: make
