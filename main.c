@@ -17,6 +17,37 @@ void print_wrong_arg()
     printf("--count		вывод количества хостов\n");
 }
 
+int is_ip(char *ip)
+{
+    int k = 0;
+    for (int j = 0; j < 4; j++)
+    {
+        int i = 0;
+        while ((ip[k] != '.') && (ip[k] != '\0'))
+        {
+            k++;
+            i++;
+            if (i > 3)
+            {
+                return 0;
+            }
+        }
+        k++;
+    }
+
+    int octet1, octet2, octet3, octet4;
+    int res = sscanf(ip, "%d.%d.%d.%d", &octet1, &octet2, &octet3, &octet4);
+    if (res != 4)
+    {
+        return 0;
+    }
+    if ((octet1 > 0 && octet1 < 255) && (octet2 >= 0 && octet2 < 255) && (octet3 >= 0 && octet3 < 255) && (octet4 >= 0 && octet4 < 255))
+    {
+        return 1;
+    }
+    return 0;
+}
+
 int main(int argc, char **argv)
 {
     int c, digit_optind = 0, option_index = 0;
@@ -88,6 +119,10 @@ int main(int argc, char **argv)
         printf(" с аргументом %s\n", arg_a);
         printf("\n m");
         printf(" с аргументом %s\n", arg_m);
+        if ((is_ip(arg_a) == 0))
+        {
+            print_wrong_arg();
+        }
     }
     else
     {
