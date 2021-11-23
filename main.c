@@ -3,13 +3,25 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <getopt.h>
+
+void print_wrong_arg()
+{
+    printf("\nipclc -a <ip-адрес> -m <маска>\n");
+    printf("\nДоступные параметры:\n");
+    printf("--broadcast		вывод широковещательного адреса\n");
+    printf("--mbit		вывод количества бит маски\n");
+    printf("--address		вывод адреса сети\n");
+    printf("--class		вывод класса адреса\n");
+    printf("--min		вывод минимального адреса\n");
+    printf("--max		вывод максимального адреса\n");
+    printf("--count		вывод количества хостов\n");
+}
+
 int main(int argc, char **argv)
 {
-
-    long int c;
-    int digit_optind = 0;
-    int option_index = 0;
-
+    int c, digit_optind = 0, option_index = 0;
+    int args[] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+    char *arg_a, *arg_m;
     static struct option long_options[] = {
         {"broadcast", 0, 0, 1},
         {"mbit", 0, 0, 2},
@@ -36,68 +48,50 @@ int main(int argc, char **argv)
         switch (c)
         {
         case 1:
-            printf("параметр %s", long_options[option_index].name);
-            if (optarg)
-                printf(" с аргументом %s", optarg);
-            printf("\n");
+            args[2] = 1;
             break;
         case 2:
-            printf("параметр %s", long_options[option_index].name);
-            if (optarg)
-                printf(" с аргументом %s", optarg);
-            printf("\n");
+            args[3] = 1;
             break;
         case 3:
-            printf("параметр %s", long_options[option_index].name);
-            if (optarg)
-                printf(" с аргументом %s", optarg);
-            printf("\n");
+            args[4] = 1;
             break;
         case 4:
-            printf("параметр %s", long_options[option_index].name);
-            if (optarg)
-                printf(" с аргументом %s", optarg);
-            printf("\n");
+            args[5] = 1;
             break;
         case 5:
-            printf("параметр %s", long_options[option_index].name);
-            if (optarg)
-                printf(" с аргументом %s", optarg);
-            printf("\n");
+            args[6] = 1;
             break;
         case 6:
-            printf("параметр %s", long_options[option_index].name);
-            if (optarg)
-                printf(" с аргументом %s", optarg);
-            printf("\n");
+            args[7] = 1;
             break;
         case 7:
-            printf("параметр %s", long_options[option_index].name);
-            if (optarg)
-                printf(" с аргументом %s", optarg);
-            printf("\n");
+            args[8] = 1;
             break;
         case 'a':
-            printf(" a");
-            printf(" с аргументом %s", optarg);
+            arg_a = optarg;
+            args[0] = 1;
             break;
         case 'm':
-            printf(" m");
-            printf(" с аргументом %s", optarg);
+            arg_m = optarg;
+            args[1] = 1;
             break;
         case '?':
-            printf("\nipclc -a <ip-адрес> -m <маска>\n");
-            printf("\nДоступные параметры:\n");
-            printf("--broadcast		вывод широковещательного адреса\n");
-            printf("--mbit		вывод количества бит маски\n");
-            printf("--address		вывод адреса сети\n");
-            printf("--class		вывод класса адреса\n");
-            printf("--min		вывод минимального адреса\n");
-            printf("--max		вывод максимального адреса\n");
-            printf("--count		вывод количества хостов\n");
+            print_wrong_arg();
         default:
             abort();
         }
+    }
+    if (args[0] == 1 && args[1] == 1)
+    {
+        printf("\n a");
+        printf(" с аргументом %s\n", arg_a);
+        printf("\n m");
+        printf(" с аргументом %s\n", arg_m);
+    }
+    else
+    {
+        print_wrong_arg();
     }
     return 0;
 }
