@@ -3,4 +3,6 @@ compiler: gcc
 
 os: linux
 
-script: make
+script:
+    - test 
+    - make
