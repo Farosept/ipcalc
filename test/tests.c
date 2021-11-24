@@ -9,24 +9,26 @@ CTEST(to_digit, test_255_255_255_0){
     char ip[] = "255.255.255.0";
 
     // When
-    to_digit(ip,binary_mask);
+    int binary[32];
+    to_digit(ip,binary);
 
     // Then
     const int expected[] = {1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 0,0,0,0,0,0,0,0};
 
-    ASSERT_DATA(expected,128, binary_mask,128);
+    ASSERT_DATA(expected,32, binary,32);
 }
 CTEST(to_digit, test_255_255_252_0){
     // Given
     char ip[] = "255.255.252.0";
 
     // When
-    to_digit(ip,binary_mask);
+    int binary[32];
+    to_digit(ip,binary);
 
     // Then
     const int expected[] = {1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,0,0, 0,0,0,0,0,0,0,0};
 
-    ASSERT_DATA(expected,128, binary_mask,128);
+    ASSERT_DATA(expected,32, binary,32);
 }
 
 CTEST(to_digit, test_192_168_0_2){
@@ -34,24 +36,26 @@ CTEST(to_digit, test_192_168_0_2){
     char ip[] = "192.168.0.2";
 
     // When
-    to_digit(ip,binary_ip);
+    int binary[32];
+    to_digit(ip,binary);
 
     // Then
     const int expected[] = {1,1,0,0,0,0,0,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0};
 
-    ASSERT_DATA(expected,128, binary_ip,128);
+    ASSERT_DATA(expected,32, binary,32);
 }
 CTEST(to_digit, test_192_0_1_2){
     // Given
     char ip[] = "192.0.1.2";
 
     // When
-    to_digit(ip,binary_ip);
+    int binary[32];
+    to_digit(ip,binary);
 
     // Then
     const int expected[] = {1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0};
 
-    ASSERT_DATA(expected,128, binary_ip,128);
+    ASSERT_DATA(expected,32, binary,32);
 }
 
 //is_ip
