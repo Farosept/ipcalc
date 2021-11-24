@@ -1,5 +1,44 @@
 #include "ipclc.h"
 
+//Print
+void print_wrong_arg()
+{
+    printf("\nipclc -a <ip-адрес> -m <маска>\n");
+    printf("\nДоступные параметры:\n");
+    printf("--broadcast		вывод широковещательного адреса\n");
+    printf("--mbit		вывод количества бит маски\n");
+    printf("--2ress		вывод адреса сети\n");
+    printf("--class		вывод класса адреса\n");
+    printf("--min		вывод минимального адреса\n");
+    printf("--max		вывод максимального адреса\n");
+    printf("--count		вывод количества хостов\n");
+}
+void print_mbit(int bits)
+{
+    printf("Bitmask: %d\n", bits);
+}
+void print_network_address(char *ip, char *mask)
+{
+    char res[20];
+    get_network_address(ip, mask, res);
+    printf("Network address: %s\n", res);
+}
+void to_dec(int *binary, char *res)
+{
+    int octets[] = {0, 0, 0, 0};
+    int k = 0, p = 0;
+    for (int i = 0; i < 32; i += 8)
+    {
+        p = 7;
+        for (int j = i; j < i + 8; j++)
+        {
+            octets[k] += (power(2, p) * binary[j]);
+            p--;
+        }
+        k++;
+    }
+    sprintf(res, "%d.%d.%d.%d", octets[0], octets[1], octets[2], octets[3]);
+}
 void to_digit(char *ch, int *binary)
 {
     int octet1, octet2, octet3, octet4, i = 0;
@@ -30,18 +69,6 @@ void to_digit(char *ch, int *binary)
             binary[(7 + (8 * u)) - i] = tmp;
         }
     }
-}
-void print_wrong_arg()
-{
-    printf("\nipclc -a <ip-адрес> -m <маска>\n");
-    printf("\nДоступные параметры:\n");
-    printf("--broadcast		вывод широковещательного адреса\n");
-    printf("--mbit		вывод количества бит маски\n");
-    printf("--address		вывод адреса сети\n");
-    printf("--class		вывод класса адреса\n");
-    printf("--min		вывод минимального адреса\n");
-    printf("--max		вывод максимального адреса\n");
-    printf("--count		вывод количества хостов\n");
 }
 int is_ip(char *ip)
 {
@@ -109,4 +136,38 @@ int is_mask(char *mask)
         return 1;
     }
     return 0;
+}
+
+int get_bit_mask()
+{
+    int bits = 0;
+    for (int i = 0; i < 32; i++)
+    {
+        if (binary_mask[i] == 1)
+        {
+            bits++;
+        }
+    }
+    return bits;
+}
+
+void get_network_address(char *ip, char *mask, char *res)
+{
+    int address[32];
+
+    to_digit(ip, binary_ip);
+    to_digit(mask, binary_mask);
+
+    for (int i = 0; i < 32; i++)
+    {
+        address[i] = (binary_ip[i] * binary_mask[i]);
+    }
+    to_dec(address, res);
+}
+
+int power(int x, int n)
+{
+    if (n == 0)
+        return 1;
+    return x * power(x, n - 1);
 }

@@ -7,8 +7,8 @@ int main(int argc, char **argv)
     char *arg_a, *arg_m;
     static struct option long_options[] = {
         {"broadcast", 0, 0, 1},
-        {"mbit", 0, 0, 2},
-        {"address", 0, 0, 3},
+        {"mbit", 0, 0, 2},    //+
+        {"address", 0, 0, 3}, //+
         {"class", 0, 0, 4},
         {"min", 0, 0, 5},
         {"max", 0, 0, 6},
@@ -53,17 +53,28 @@ int main(int argc, char **argv)
             abort();
         }
     }
-    if (args[0] == 1 && args[1] == 1)
+    if ((args[0] == 1 && args[1] == 1) || (args[1] == 1 && args[3] == 1))
     {
 
-        if ((is_ip(arg_a) == 0)||(is_mask(arg_m) == 0))
+        if (((is_ip(arg_a) == 0) && args[3] == 0) || (is_mask(arg_m) == 0))
         {
             print_wrong_arg();
-        }else{
-                    printf("\n a");
-        printf(" с аргументом %s\n", arg_a);
-        printf("\n m");
-        printf(" с аргументом %s\n", arg_m);
+        }
+        else
+        {
+            if (args[3] == 1)
+            {
+                print_mbit(get_bit_mask());
+            }
+            if (args[4] == 1)
+            {
+                print_network_address(arg_a, arg_m);
+            }
+            if (args[2] == 0 && args[3] == 0 && args[4] == 0 && args[5] == 0 && args[6] == 0 && args[7] == 0 && args[8] == 0)
+            {
+                print_mbit(get_bit_mask());
+                print_network_address(arg_a, arg_m);
+            }
         }
     }
     else
