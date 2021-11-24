@@ -31,7 +31,7 @@ void print_min_host(char *ip, char *mask)
 {
     char res[20];
     get_min_host(ip, mask, res, NULL);
-    printf("Minimal host: %s\n", res);
+    printf("Min host: %s\n", res);
 }
 void print_broadcast(char *ip, char *mask)
 {

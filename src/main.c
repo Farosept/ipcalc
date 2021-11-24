@@ -6,13 +6,13 @@ int main(int argc, char **argv)
     int args[] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     char *arg_a, *arg_m;
     static struct option long_options[] = {
-        {"broadcast", 0, 0, 1},//+
-        {"mbit", 0, 0, 2},    //+
-        {"address", 0, 0, 3}, //+
-        {"class", 0, 0, 4},//+
-        {"min", 0, 0, 5},//+
-        {"max", 0, 0, 6},//+
-        {"count", 0, 0, 7},//+
+        {"broadcast", 0, 0, 1}, //+
+        {"mbit", 0, 0, 2},      //+
+        {"address", 0, 0, 3},   //+
+        {"class", 0, 0, 4},     //+
+        {"min", 0, 0, 5},       //+
+        {"max", 0, 0, 6},       //+
+        {"count", 0, 0, 7},     //+
         {0, 0, 0, 0}};
     while ((c = getopt_long(argc, argv, "a:m:", long_options, &option_index)) != -1)
     {
@@ -55,7 +55,6 @@ int main(int argc, char **argv)
     }
     if ((args[0] == 1 && args[1] == 1) || (args[1] == 1 && args[3] == 1))
     {
-
         if (((is_ip(arg_a) == 0) && args[3] == 0) || (is_mask(arg_m) == 0))
         {
             print_wrong_arg();
@@ -65,6 +64,10 @@ int main(int argc, char **argv)
             to_digit(arg_a, binary_ip);
             to_digit(arg_m, binary_mask);
 
+            if (args[2] == 1)
+            {
+                print_broadcast(arg_a, arg_m);
+            }
             if (args[3] == 1)
             {
                 print_mbit();
@@ -73,13 +76,29 @@ int main(int argc, char **argv)
             {
                 print_network_address(arg_a, arg_m);
             }
+            if (args[5] == 1)
+            {
+                print_class(arg_a);
+            }
+            if (args[6] == 1)
+            {
+                print_min_host(arg_a, arg_m);
+            }
+            if (args[7] == 1)
+            {
+                print_max_host(arg_a, arg_m);
+            }
+            if (args[8] == 1)
+            {
+                print_count();
+            }
             if (args[2] == 0 && args[3] == 0 && args[4] == 0 && args[5] == 0 && args[6] == 0 && args[7] == 0 && args[8] == 0)
             {
-                print_mbit();
                 print_network_address(arg_a, arg_m);
+                print_mbit();
                 print_min_host(arg_a, arg_m);
-                print_broadcast(arg_a, arg_m);
                 print_max_host(arg_a, arg_m);
+                print_broadcast(arg_a, arg_m);
                 print_count();
                 print_class(arg_a);
             }
