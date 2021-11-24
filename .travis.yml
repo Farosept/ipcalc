@@ -4,5 +4,6 @@ compiler: gcc
 os: linux
 
 script:
-    - test 
     - make
+    - make test
+    - $(CURDIR)/build/test/test
