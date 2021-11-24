@@ -6,4 +6,4 @@ os: linux
 script:
     - make
     - make test
-    - $(CURDIR)/build/test/test
+    - ./test_start
