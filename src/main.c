@@ -61,16 +61,13 @@ int main(int argc, char **argv)
         }
         else
         {
-            to_digit(arg_a, binary_ip);
-            to_digit(arg_m, binary_mask);
-
             if (args[2] == 1)
             {
                 print_broadcast(arg_a, arg_m);
             }
             if (args[3] == 1)
             {
-                print_mbit();
+                print_mbit(arg_m);
             }
             if (args[4] == 1)
             {
@@ -90,16 +87,16 @@ int main(int argc, char **argv)
             }
             if (args[8] == 1)
             {
-                print_count();
+                print_count(arg_m);
             }
             if (args[2] == 0 && args[3] == 0 && args[4] == 0 && args[5] == 0 && args[6] == 0 && args[7] == 0 && args[8] == 0)
             {
                 print_network_address(arg_a, arg_m);
-                print_mbit();
+                print_mbit(arg_m);
                 print_min_host(arg_a, arg_m);
                 print_max_host(arg_a, arg_m);
                 print_broadcast(arg_a, arg_m);
-                print_count();
+                print_count(arg_m);
                 print_class(arg_a);
             }
         }
