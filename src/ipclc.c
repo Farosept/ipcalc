@@ -73,8 +73,8 @@ void print_class(char *ip)
 void to_dec(unsigned char *binary, char *res)
 {
     int octets[] = {0, 0, 0, 0};
-    int k = 0, p = 0;
-    for (int i = 0; i < 4; i++)
+    int i = 0;
+    for (i = 0; i < 4; i++)
     {
         octets[i] += (int)binary[i];
     }
@@ -85,13 +85,13 @@ void to_digit(char *ch, unsigned char *binary)
     int octet1, octet2, octet3, octet4, i = 0;
     sscanf(ch, "%d.%d.%d.%d", &octet1, &octet2, &octet3, &octet4);
     int octets[] = {octet1, octet2, octet3, octet4};
-    for (int j = 0; j < 4; j++)
+    for (i = 0; i < 4; i++)
     {
-        int n = octets[j];
+        int n = octets[i];
         int k = 0;
         do
         {
-            binary[j] |= (n % 2) << k;
+            binary[i] |= (n % 2) << k;
             n = n / 2;
             k++;
         } while (n > 0 || k < 7);
@@ -100,8 +100,8 @@ void to_digit(char *ch, unsigned char *binary)
 
 int is_ip(char *ip)
 {
-    int k = 0;
-    for (int j = 0; j < 4; j++)
+    int k = 0, j = 0;
+    for (j = 0; j < 4; j++)
     {
         int i = 0;
         while ((ip[k] != '.') && (ip[k] != '\0'))
@@ -130,15 +130,15 @@ int is_ip(char *ip)
 }
 int is_mask(char *mask)
 {
-    int k = 0;
-    for (int j = 0; j < 4; j++)
+    int k = 0, j = 0, i = 0;
+    for (j = 0; j < 4; j++)
     {
-        int i = 0;
+        int z = 0;
         while ((mask[k] != '.') && (mask[k] != '\0'))
         {
             k++;
-            i++;
-            if (i > 3)
+            z++;
+            if (z > 3)
             {
                 return 0;
             }
@@ -147,11 +147,12 @@ int is_mask(char *mask)
     }
     unsigned char m[4] = {0, 0, 0, 0};
     to_digit(mask, m);
-    for (int i = 0; i < 4; i++)
+    j = 6;
+    for (i = 0; i < 4; i++)
     {
-        for (int j = 6; j > 0; j--)
+        for (j = 6; j > 0; j--)
         {
-            if (((m[i] & (1 << j + 1)) == 0) && ((m[i] & (1 << j)) > 0))
+            if (((m[i] & (1 << (j + 1))) == 0) && ((m[i] & (1 << j)) > 0))
             {
                 return 0;
             }
@@ -174,10 +175,10 @@ int get_bit_mask(char *mask)
 {
     unsigned char m[4] = {0, 0, 0, 0};
     to_digit(mask, m);
-    int bits = 0;
-    for (int i = 0; i < 4; i++)
+    int bits = 0, i = 0, j = 0;
+    for (i = 0; i < 4; i++)
     {
-        for (int j = 0; j < 8; j++)
+        for (j = 0; j < 8; j++)
         {
             if ((m[i] & (1 << j)) > 0)
             {
@@ -195,7 +196,8 @@ void get_network_address(char *ip, char *mask, char *res_char, unsigned char *re
     unsigned char ip_bin[4] = {0, 0, 0, 0};
     to_digit(mask, m_bin);
     to_digit(ip, ip_bin);
-    for (int i = 0; i < 4; i++)
+    int i = 0;
+    for (i = 0; i < 4; i++)
     {
         address[i] = (ip_bin[i] & m_bin[i]);
         if (res_mass != NULL)
@@ -216,7 +218,8 @@ void get_min_host(char *ip, char *mask, char *res_char, unsigned char *res_mass)
     address[3] |= 1 << 0;
     if (res_mass != NULL)
     {
-        for (int i = 0; i < 32; i++)
+        int i = 0;
+        for (i = 0; i < 32; i++)
         {
             res_mass[i] = address[i];
         }
@@ -234,12 +237,13 @@ void get_broadcast(char *ip, char *mask, char *res_char, unsigned char *res_mass
     unsigned char ip_bin[4] = {0, 0, 0, 0};
     to_digit(mask, m_bin);
     to_digit(ip, ip_bin);
-
-    for (int i = 0; i < 4; i++)
+    int i = 0;
+    for (i = 0; i < 4; i++)
     {
         invert_mask[i] = ~m_bin[i];
     }
-    for (int i = 0; i < 4; i++)
+    i = 0;
+    for (i = 0; i < 4; i++)
     {
         address[i] = ip_bin[i] | invert_mask[i];
         if (res_mass != NULL)
@@ -257,19 +261,20 @@ void get_broadcast(char *ip, char *mask, char *res_char, unsigned char *res_mass
 
 void get_max_host(char *ip, char *mask, char *res_char, unsigned char *res_mass)
 {
-    unsigned char address[4]={0,0,0,0};
+    unsigned char address[4] = {0, 0, 0, 0};
     get_broadcast(ip, mask, NULL, address);
     address[3] &= ~(1 << 0);
     if (res_mass != NULL)
     {
-        for (int i = 0; i < 4; i++)
+        int i = 0;
+        for (i = 0; i < 4; i++)
         {
             res_mass[i] = address[i];
         }
     }
     if (res_char != NULL)
     {
-      to_dec(address, res_char);
+        to_dec(address, res_char);
     }
 }
 
@@ -303,6 +308,7 @@ int get_class(char *ip)
     {
         return 5;
     }
+    return 1;
 }
 
 int power(int x, int n)
