@@ -4,3 +4,5 @@
 build/
 bin/
 build/test/
+.vscode/
+test_start
