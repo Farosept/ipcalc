@@ -7,7 +7,7 @@ void print_wrong_arg()
     printf("\nДоступные параметры:\n");
     printf("--broadcast		вывод широковещательного адреса\n");
     printf("--mbit		вывод количества бит маски\n");
-    printf("--2ress		вывод адреса сети\n");
+    printf("--address		вывод адреса сети\n");
     printf("--class		вывод класса адреса\n");
     printf("--min		вывод минимального адреса\n");
     printf("--max		вывод максимального адреса\n");

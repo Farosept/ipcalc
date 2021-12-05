@@ -3,21 +3,21 @@
 #include "ipclc.h"
 
 //to_digit
-CTEST(to_digit, test_mask_1)
+CTEST(to_digit, test_1)
 {
     // Given
-    char ip[] = "255.255.255.254";
+    char ip[] = "255.255.255.252";
 
     // When
     unsigned char binary[4] = {0, 0, 0, 0};
     to_digit(ip, binary);
 
     // Then
-    const unsigned char expected[] = {255, 255, 255, 254};
+    const unsigned char expected[] = {255,255,255,252};
 
     ASSERT_DATA(expected, 4, binary, 4);
 }
-CTEST(to_digit, test_mask_2)
+CTEST(to_digit, test_2)
 {
     // Given
     char ip[] = "255.255.252.0";
@@ -27,86 +27,83 @@ CTEST(to_digit, test_mask_2)
     to_digit(ip, binary);
 
     // Then
-    const unsigned char expected[] = {255, 255, 252, 0};
+    const unsigned char expected[] = {255,255,252,0};
 
     ASSERT_DATA(expected, 4, binary, 4);
 }
-CTEST(to_digit, test_mask_3)
+CTEST(to_digit, test_3)
 {
     // Given
-    char ip[] = "255.255.0.0";
+    char ip[] = "255.252.0.0";
 
     // When
     unsigned char binary[4] = {0, 0, 0, 0};
     to_digit(ip, binary);
 
     // Then
-    const unsigned char expected[] = {255, 255, 0, 0};
+    const unsigned char expected[] = {255,252,0,0};
 
     ASSERT_DATA(expected, 4, binary, 4);
 }
-CTEST(to_digit, test_mask_4)
+CTEST(to_digit, test_4)
 {
     // Given
-    char ip[] = "255.0.0.0";
+    char ip[] = "252.0.0.0";
 
     // When
     unsigned char binary[4] = {0, 0, 0, 0};
     to_digit(ip, binary);
 
     // Then
-    const unsigned char expected[] = {255, 0, 0, 0};
-
-    ASSERT_DATA(expected, 4, binary, 4);
-}
-CTEST(to_digit, test_ip_1)
-{
-    // Given
-    char ip[] = "192.168.0.0";
-
-    // When
-    unsigned char binary[4] = {0, 0, 0, 0};
-    to_digit(ip, binary);
-
-    // Then
-    const unsigned char expected[] = {192, 168, 0, 0};
-
-    ASSERT_DATA(expected, 4, binary, 4);
-}
-CTEST(to_digit, test_ip_2)
-{
-    // Given
-    char ip[] = "192.168.0.2";
-
-    // When
-    unsigned char binary[4] = {0, 0, 0, 0};
-    to_digit(ip, binary);
-
-    // Then
-    const unsigned char expected[] = {192, 168, 0, 2};
-
-    ASSERT_DATA(expected, 4, binary, 4);
-}
-CTEST(to_digit, test_ip_3)
-{
-    // Given
-    char ip[] = "11.0.0.2";
-
-    // When
-    unsigned char binary[4] = {0, 0, 0, 0};
-    to_digit(ip, binary);
-
-    // Then
-    const unsigned char expected[] = {11, 0, 0, 2};
+    const unsigned char expected[] = {252,0,0,0};
 
     ASSERT_DATA(expected, 4, binary, 4);
 }
 
 //is_ip
-CTEST(is_ip, test_1_ok)
+CTEST(is_ip, test_1)
 {
     // Given
-    char ip[] = "192.0.1.2";
+    char ip[] = "192.1680.2";
+
+    // When
+    const int real = is_ip(ip);
+
+    // Then
+    const int expected = 0;
+
+    ASSERT_EQUAL(expected, real);
+}
+CTEST(is_ip, test_2_oktet_1_1)
+{
+    // Given
+    char ip[] = "-1.0.0.0";
+
+    // When
+    const int real = is_ip(ip);
+
+    // Then
+    const int expected = 0;
+
+    ASSERT_EQUAL(expected, real);
+}
+CTEST(is_ip, test_2_oktet_1_2)
+{
+    // Given
+    char ip[] = "0.0.0.0";
+
+    // When
+    const int real = is_ip(ip);
+
+    // Then
+    const int expected = 0;
+
+    ASSERT_EQUAL(expected, real);
+}
+CTEST(is_ip, test_2_oktet_1_3)
+{
+    // Given
+    char ip[] = "1.0.0.0";
 
     // When
     const int real = is_ip(ip);
@@ -116,10 +113,23 @@ CTEST(is_ip, test_1_ok)
 
     ASSERT_EQUAL(expected, real);
 }
-CTEST(is_ip, test_2_no)
+CTEST(is_ip, test_2_oktet_1_4)
 {
     // Given
-    char ip[] = "192.0.1.";
+    char ip[] = "254.0.0.0";
+
+    // When
+    const int real = is_ip(ip);
+
+    // Then
+    const int expected = 1;
+
+    ASSERT_EQUAL(expected, real);
+}
+CTEST(is_ip, test_2_oktet_1_5)
+{
+    // Given
+    char ip[] = "255.0.0.0";
 
     // When
     const int real = is_ip(ip);
@@ -129,10 +139,10 @@ CTEST(is_ip, test_2_no)
 
     ASSERT_EQUAL(expected, real);
 }
-CTEST(is_ip, test_3_no)
+CTEST(is_ip, test_2_oktet_1_6)
 {
     // Given
-    char ip[] = "asd";
+    char ip[] = "256.0.0.0";
 
     // When
     const int real = is_ip(ip);
@@ -142,10 +152,10 @@ CTEST(is_ip, test_3_no)
 
     ASSERT_EQUAL(expected, real);
 }
-CTEST(is_ip, test_4_no)
+CTEST(is_ip, test_2_oktet_3_1)
 {
     // Given
-    char ip[] = "11111.1111.222.333";
+    char ip[] = "192.0.-1.0";
 
     // When
     const int real = is_ip(ip);
@@ -155,10 +165,49 @@ CTEST(is_ip, test_4_no)
 
     ASSERT_EQUAL(expected, real);
 }
-CTEST(is_ip, test_5_no)
+CTEST(is_ip, test_2_oktet_3_2)
 {
     // Given
-    char ip[] = "192.168.0";
+    char ip[] = "192.0.0.0";
+
+    // When
+    const int real = is_ip(ip);
+
+    // Then
+    const int expected = 1;
+
+    ASSERT_EQUAL(expected, real);
+}
+CTEST(is_ip, test_2_oktet_3_3)
+{
+    // Given
+    char ip[] = "192.0.1.0";
+
+    // When
+    const int real = is_ip(ip);
+
+    // Then
+    const int expected = 1;
+
+    ASSERT_EQUAL(expected, real);
+}
+CTEST(is_ip, test_2_oktet_3_4)
+{
+    // Given
+    char ip[] = "192.0.254.0";
+
+    // When
+    const int real = is_ip(ip);
+
+    // Then
+    const int expected = 1;
+
+    ASSERT_EQUAL(expected, real);
+}
+CTEST(is_ip, test_2_oktet_3_5)
+{
+    // Given
+    char ip[] = "192.0.255.0";
 
     // When
     const int real = is_ip(ip);
@@ -168,6 +217,33 @@ CTEST(is_ip, test_5_no)
 
     ASSERT_EQUAL(expected, real);
 }
+CTEST(is_ip, test_oktet_3_6)
+{
+    // Given
+    char ip[] = "192.0.256.0";
+
+    // When
+    const int real = is_ip(ip);
+
+    // Then
+    const int expected = 0;
+
+    ASSERT_EQUAL(expected, real);
+}
+CTEST(is_ip, test_3)
+{
+    // Given
+    char ip[] = "192..256.0";
+
+    // When
+    const int real = is_ip(ip);
+
+    // Then
+    const int expected = 0;
+
+    ASSERT_EQUAL(expected, real);
+}
+
 
 //is_mask
 CTEST(is_mask, test_1_ok)
